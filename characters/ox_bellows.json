@@ -1,0 +1,15 @@
+{
+    "name": "Ox Bellows",
+    "age": 23,
+    "height": 193,
+    "weight": 130,
+    "hobbies": ["Football", "Shiny objects"],
+    "birthday": [18, 10],
+    "stats": {
+        "might": [0, 4, 5, 5, 6, 6, 7, 8, 8],
+        "speed": [0, 2, 2, 2, 3, 4, 5, 5, 6],
+        "sanity": [0, 2, 2, 3, 4, 5, 5, 6, 7],
+        "knowledge": [0, 2, 2, 3, 3, 5, 5, 6, 6],
+        "starting_stats": [4, 6, 4, 4]
+    }
+}
