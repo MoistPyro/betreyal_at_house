@@ -1,12 +1,10 @@
 {
-    "title": "Smelling Salts",
-    "head": "Whew, that's a lungful.",
-    "body": "If your Knowledge is below its starting value, you can raise that trait to its starting value by using this.",
-    "lifetime": "Consumable",
-    "methods": {
-        "draw": null,
-        "activate": null,
-        "spend": null,
-        "discard": null
-    }
+    "title": ["SMELLING SALT"],
+    "head": ["Whew, that's a lungful."],
+    "body": [
+        "If your Knowledge is below",
+        "its starting value, you can",
+        "raise that trait to its starting",
+        " value by using this."
+    ]
 }

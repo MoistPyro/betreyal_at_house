@@ -1,0 +1,19 @@
+{
+    "title": ["GIRL"],
+    "head": [
+        "COMPANION",
+        "A girl.",
+        "Trapped.",
+        "Alone.",
+        "You free her!"
+    ],
+    "body": [
+        "Gain 1 Sanity and 1 Knowledge now.",
+        "Lose 1 Sanity and 1 Knowledge if",
+        "you lose custody of the girl.",
+        "This omen can't be dropped, traded,",
+        " or stolen.",
+        "",
+        "Make a haunt roll now."
+    ]
+}

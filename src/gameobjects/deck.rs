@@ -1,15 +1,21 @@
 use rand::{thread_rng, Rng};
 
-use super::card::Card;
+use super::cards::Card;
 
 pub struct Deck {
-    pub name: String,
-    cards: Vec<Card>,
+    name: String,
+    cards: Vec<Box<dyn Card>>,
 }
 
 impl Deck {
-    pub fn new(name: &str, cards: Vec<Card>) -> Self {
-        Self { name: name.to_string(), cards: cards }
+    pub fn new(name: &str, cards: Vec<Box<dyn Card>>) -> Self {
+        let mut r = Self { name: name.to_string(), cards };
+        r.shuffle();
+        r
+    }
+
+    pub fn get_title(&self) -> String {
+        self.name.to_string()
     }
 
     pub fn shuffle(&mut self) {
@@ -17,11 +23,11 @@ impl Deck {
         rng.shuffle(&mut self.cards);
     }
 
-    pub fn draw(&mut self) -> Card {
+    pub fn draw(&mut self) -> Box<dyn Card> {
         self.cards.pop().unwrap()
     }
 
-    pub fn add_card(&mut self, card: Card) {
+    pub fn add_card(&mut self, card: Box<dyn Card>) {
         self.cards.push(card);
     }
 }

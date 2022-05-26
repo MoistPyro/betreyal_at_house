@@ -1,51 +1,52 @@
-use super::{card::{Card, LifeTime}, character::Character, deck::Deck};
+use rand::{thread_rng, Rng};
+
+use super::cards::{Card, Consumable, Activatable};
+use super::{character::Character, deck::Deck};
 
 pub struct Player {
-    pub cards: Vec<Card>,
+    pub cards: Vec<Box<dyn Card>>,
     pub character: Character,
 }
 
 impl Player {
     pub fn new(character: Character) -> Self {
-        Self { cards: Vec::<Card>::new(), character: character }
+        Self { cards: Vec::<Box<dyn Card>>::new(), character }
     }
 
-    pub fn draw_card(&mut self, deck: &mut Deck) {
-        let card: Card = deck.draw();
-        card.run_draw_method(&mut self.character);
-
-        match card.lifetime {
-            LifeTime::OneShot => (),
-            _ => self.cards.push(card),
-        }
+    fn shuffle_hand(&mut self) {
+        let mut rng = thread_rng();
+        rng.shuffle(&mut self.cards);
     }
 
-    pub fn discard_card(&mut self, i: usize) {
-        let card = self.cards.remove(i);
-        card.run_discard_method(&mut self.character);
+    pub fn draw_card(&mut self, deck: &mut Deck) -> Box<dyn Card> {
+        let card: Box<dyn Card> = deck.draw();
+        card.draw_method(&mut self.character);
+        card
     }
 
-    fn spend_consumable(&mut self, card: Card) {
-        card.run_spend_method(&mut self.character);
-        card.run_discard_method(&mut self.character);
+    pub fn discard_card(&mut self, index: usize) {
+        let card: Box<dyn Card> = self.cards.remove(index);
+        card.discard_method(&mut self.character);
     }
 
-    fn activate_permanent(&mut self, card: Card) {
-        card.run_activate_method(&mut self.character);
-        self.cards.push(card);
+    pub fn give_card(&mut self, index: usize) -> Box<dyn Card> {
+        self.cards.remove(index)
+    }
+    pub fn give_card_random(&mut self) -> Box<dyn Card> {
+        self.shuffle_hand();
+        self.cards.pop().unwrap()
     }
 
-    pub fn activate_card(&mut self, i: usize) {
-        let card = self.cards.remove(i);
+    fn spend_consumable(&mut self, card: impl Consumable) {
+        card.spend_method(&mut self.character);
+    }
 
-        match card.lifetime {
-            LifeTime::OneShot => (),
-            LifeTime::Consumable => self.spend_consumable(card),
-            LifeTime::Permanent(_) => self.activate_permanent(card),
-        }
+    fn activate_permanent(&mut self, card: impl Activatable) -> impl Activatable {
+        card.activate_method(&mut self.character);
+        card
     }
 
     pub fn look_for_card(&self, title: String) -> usize {
-        self.cards.iter().position(|x| {x.title == title}).unwrap()
+        self.cards.iter().position(|x| x.get_title() == title).unwrap()
     }
 }

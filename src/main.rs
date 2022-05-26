@@ -1,18 +1,18 @@
-use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{GlGraphics, OpenGL};
+use prelude::Window;
+use opengl_graphics::OpenGL;
 use piston::event_loop::{EventSettings, EventLoop, Events};
-use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
+use piston::input::{UpdateArgs, UpdateEvent, RenderEvent};
 use piston::window::WindowSettings;
-use graphics::*;
 
-use game_controller::{GameController, GameBoard};
+use game_controller::GameController;
+use die_roller::roll_die;
 
+mod prelude;
 mod gameobjects;
 mod json;
 mod card_render;
 mod game_controller;
-
-const BG_COLOUR: [f32; 4] = [0.3, 0.3, 0.3, 1.0];
+mod die_roller;
 
 fn main() {
     start_app();
@@ -26,22 +26,15 @@ fn start_app() {
         .exit_on_esc(true)
         .build().unwrap();
 
-    let mut events = Events::new(EventSettings::new()).lazy(true);
-    let mut gl = GlGraphics::new(opengl);
+    let mut events = Events::new(EventSettings::new().lazy(true));
 
-    let gameboard = GameBoard::new();
-    let mut controller = GameController::new(gameboard);
+    let mut controller = GameController::new(opengl);
+
+    let card = controller.gameboard.players[0].draw_card(&mut controller.gameboard.decks[roll_die() as usize]);
+    controller.gameboard.card_into_slot(card, 1);
 
     while let Some(e) = events.next(&mut window) {
         controller.event(&e);
-        if let Some(args) = e.render_args() {
-            gl.draw(args.viewport(), |context, gl_graphics| {
-                clear(BG_COLOUR, gl_graphics);
-
-            });
-        }
-        if let Some(args) = e.update_args() {
-            
-        }
+        if let Some(args) = e.update_args() {}
     }
 }
