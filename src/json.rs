@@ -1,23 +1,15 @@
 use std::{fs, path::Path, ffi::OsStr};
 use serde_json::{from_str, Value};
-use serde::{Serialize, Deserialize};
+use serde::Deserialize;
 
 use crate::prelude::*;
 
-const CHARACTER_PATH: &str = "./characters/";
-
-#[derive(Serialize, Deserialize)]
-struct CardFields {
-    title: Vec<String>,
-    head: Vec<String>,
-    body: Vec<String>,
-}
-
-pub fn get_card_data(path: &str) -> CardData {
+///the .json file must fit the CardFields stuct, or this panics.
+pub fn get_card_data(path: &str) -> CardFields {
     let data: String = fs::read_to_string(path).expect("failed reading file.");
     let fields: CardFields = from_str(&data).expect("failed parsing json");
 
-    (fields.title, fields.head, fields.body)
+    fields
 }
 
 pub fn get_character_data(path: &str) -> CharacterData {
@@ -74,7 +66,8 @@ pub fn get_character_data(path: &str) -> CharacterData {
     }
     
 pub fn get_all_character_data() -> Vec<CharacterData> {
-    let path_list = get_json_in_dir(CHARACTER_PATH);
+    let character_path = get_settings().character_path;
+    let path_list = get_json_in_dir(&character_path);
     path_list.iter().map(|p| get_character_data(p)).collect()
 }
 
@@ -93,4 +86,32 @@ fn get_json_in_dir(p: &str) -> Vec<String> {
         };
     }
     r
+}
+
+#[derive(Deserialize)]
+pub struct Settings {
+    pub game_title: String,
+    pub window_size: [f64; 2],
+    pub background_colour: [f32; 4],
+    pub card_border_colour: [f32; 4],
+    pub card_text_colour: [f32; 4],
+    pub card_event_bg_colour: [f32; 4],
+    pub card_item_bg_colour: [f32; 4],
+    pub card_omen_bg_colour: [f32; 4],
+    pub card_size: [f64; 2],
+    pub card_title_font_path: String,
+    pub card_head_font_path: String,
+    pub card_body_font_path: String,
+    pub card_title_size: u32,
+    pub card_head_size: u32,
+    pub card_body_size: u32,
+    pub character_path: String,
+}
+
+///reads settings.json, and returns an object with all the settings.
+pub fn get_settings() -> Settings {
+    let path = SETTINGS_PATH;
+    let data: String = fs::read_to_string(path).expect("failed reading file.");
+    let settings: Settings = from_str(&data).expect("failed parsing json");
+    settings
 }

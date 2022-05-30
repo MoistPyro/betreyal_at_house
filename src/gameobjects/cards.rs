@@ -15,9 +15,9 @@ pub trait Card {
     fn draw_method(&self, character: &mut Character) {}
     fn discard_method(&self, character: &mut Character) {}
 
-    fn set_pos(&mut self, position: Vec<f64>);
+    fn set_pos(&mut self, position: [f64; 2]);
     fn set_visible(&mut self, v: bool);
-    fn draw(&self, context: &Context, graphics: &mut GlGraphics);
+    fn draw(&mut self, context: &Context, graphics: &mut GlGraphics);
 }
 
 pub trait Consumable: Card {

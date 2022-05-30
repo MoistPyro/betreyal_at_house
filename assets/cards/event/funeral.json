@@ -1,0 +1,21 @@
+{
+    "title": [ "FUNERAL" ],
+    "head": ["You see an open coffin.", "You're inside it."],
+    "body": ["You must attempt a",
+        "Sanity roll:",
+        "4+    You blink, and it's",
+        "        gone. Gain 1 Sanity.",
+        "",
+        "2-3  The vision disturbs",
+        "        you. Lose 1 Sanity.",
+        "",
+        "0-1  You're really in the",
+        "        coffin. Lose 1 Sanity",
+        "        and 1 Might as you",
+        "        dig yourself out.",
+        "        If the Graveyard or",
+        "        the Crypt has been",
+        "        found, put your",
+        "        explorer in one of",
+        "        those rooms."]
+}

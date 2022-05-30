@@ -1,0 +1,18 @@
+{
+    "game_title": "Treachery at Elevated Mansion",
+    "window_size": [1400, 800],
+    "background_colour": [0.2, 0.2, 0.2, 1.0],
+    "card_border_colour": [0.0, 0.0, 0.0, 1.0],
+    "card_text_colour": [0.0, 0.0, 0.0, 1.0],
+    "card_event_bg_colour": [0.7, 0.6, 0.3, 1.0],
+    "card_item_bg_colour": [0.7, 0.5, 0.2, 1.0],
+    "card_omen_bg_colour": [0.5, 0.7, 0.2, 1.0],
+    "card_size": [230.0, 460.0],
+    "card_title_font_path": "assets/PROPAGAN.ttf",
+    "card_head_font_path": "assets/carbon.ttf",
+    "card_body_font_path": "assets/SpecialElite.ttf",
+    "card_title_size": 20,
+    "card_head_size": 10,
+    "card_body_size": 10,
+    "character_path": "./assets/characters/"
+}

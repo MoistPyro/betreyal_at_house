@@ -3,7 +3,7 @@ use girl::Girl;
 
 pub mod girl;
 
-pub const JSON_PATH: &str = "./cards/omen";
+pub const JSON_PATH: &str = "./assets/cards/omen";
 
 pub fn get_cards() -> Vec<Box<dyn Card>> {
     let mut deck: Vec<Box<dyn Card>> = Vec::new();

@@ -6,8 +6,7 @@ use std::collections::HashMap;
 
 use crate::gameobjects::{cards::Card, deck::Deck, player::Player, character::Character};
 use crate::gameobjects::*;
-
-const BG_COLOUR: [f32; 4] = [0.2, 0.2, 0.2, 1.0];
+use crate::json::get_settings;
 
 pub struct GameBoard {
     pub decks: Vec<Deck>,
@@ -31,9 +30,17 @@ impl GameBoard {
 
         let mut characters: Vec<Character> = get_characters();
         let mut players: Vec<Player> = Vec::new();
-        let cards: HashMap<usize, Box<dyn Card>> = HashMap::new();
+        let mut cards: HashMap<usize, Box<dyn Card>> = HashMap::new();
 
         players.push(Player::new(characters.pop().unwrap()));
+
+        for i in 0..3 {
+            let mut card: Box<dyn Card> = players[0].draw_card(&mut decks[i]);
+            let position = [i as f64 * 350.0 + 350.0, 400.0];
+            card.set_pos(position);
+            card.set_visible(true);
+            cards.insert(i, card);
+        }
 
         Self { decks, players, cards }
     }
@@ -46,8 +53,8 @@ impl GameBoard {
     }
 
     pub fn card_into_slot(&mut self, mut card: Box<dyn Card>, i: usize) {
-        if self.slot_is_open(&i) && i >= 0 && i < 3 {
-            let position = vec![i as f64 * 350.0 + 350.0, 400.0];
+        if self.slot_is_open(&i) && i < 3 {
+            let position = [i as f64 * 350.0 + 350.0, 400.0];
             card.set_pos(position);
             card.set_visible(true);
             self.cards.insert(i, card);
@@ -69,9 +76,10 @@ pub struct GameController {
 
 impl GameController {
     pub fn new(opengl_ver: OpenGL) -> Self {
-        let gameboard = GameBoard::new();
+        let settings: crate::json::Settings = get_settings();
+        let gameboard: GameBoard = GameBoard::new();
         let open_gl: GlGraphics = GlGraphics::new(opengl_ver);
-        let background_colour: Color = [0.3, 0.3, 0.3, 1.0];
+        let background_colour: Color = settings.background_colour;
 
         Self {
             gameboard,
@@ -87,10 +95,10 @@ impl GameController {
         }
         if let Some(args) = e.render_args() {
             self.open_gl.draw(args.viewport(), |context, gl_graphics| {
-                clear(BG_COLOUR, gl_graphics);
-                for (_i, card) in &self.gameboard.cards {
-                    card.draw(&context, gl_graphics)
-                }
+                clear(self.background_colour, gl_graphics);
+                for (_i, card) in &mut self.gameboard.cards {
+                    card.draw(&context, gl_graphics);
+                };
             });
         }
     }
